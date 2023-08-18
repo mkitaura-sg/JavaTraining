@@ -48,9 +48,11 @@ public class Charge {
     @DateTimeFormat(pattern = "yyyy-MM-dd") // 日付のフォーマットを指定
     private Date endDate;
 
+    @Column(name = "created_at", updatable = false) // 対応する列名
     @CreatedDate // 作成日時を自動設定
     private Timestamp createdDate;
 
+    @Column(name = "modified_at") // 対応する列名
     @LastModifiedDate // 更新日時を自動設定
     private Timestamp updatedDate;
 }
