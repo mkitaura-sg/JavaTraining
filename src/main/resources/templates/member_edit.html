@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html th:replace="~{layout/app :: layout('加入者編集', ~{::content}, 'member')}">
+<html th:replace="~{layout/app :: layout(${memberId != null}?'加入者編集':'加入者新規追加', ~{::content}, 'member')}">
 <div th:fragment="content">
     <!--/*
         加入者情報編集画面
@@ -13,30 +13,35 @@
             <label class="col-sm-2 col-form-label" for="mail">メールアドレス</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" th:field="*{mail}" maxlength="256">
+                <span class="text-danger" th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"></span>
             </div>
         </div>
         <div class="mb-3 row">
             <label class="col-sm-2 col-form-label" for="name">氏名</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" th:field="*{name}" maxlength="16">
+                <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
             </div>
         </div>
         <div class="mb-3 row">
             <label class="col-sm-2 col-form-label" for="address">住所</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" th:field="*{address}">
+                <span class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
             </div>
         </div>
         <div class="mb-3 row">
             <label class="col-sm-2 col-form-label" for="startDate">加入日</label>
             <div class="col-sm-10">
                 <input type="date" class="form-control" th:field="*{startDate}" name="joining_date">
+                <span class="text-danger" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></span>
             </div>
         </div>
         <div class="mb-3 row">
             <label class="col-sm-2 col-form-label" for="endDate">解約日</label>
             <div class="col-sm-10">
                 <input type="date" class="form-control" th:field="*{endDate}">
+                <span class="text-danger" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></span>
             </div>
         </div>
         <div class="mb-3 row">
@@ -46,6 +51,8 @@
                     <option value="1">クレジット</option>
                     <option value="2">銀行振込</option>
                 </select>
+                <span class="text-danger" th:if="${#fields.hasErrors('paymentMethod')}"
+                    th:errors="*{paymentMethod}"></span>
             </div>
         </div>
         <!--/*-->
@@ -69,5 +76,25 @@
             </div>
         </div>
     </form>
+    <script th:inline="javascript">
+        /**
+            削除ボタンがクリックされた時の制御
+        */
+        // HTMLが読込まれたら実行する関数を登録
+        document.addEventListener("DOMContentLoaded", (e) => {
+            // idがdeleteのHTML要素(削除ボタン)を取得
+            const deleteBtn = document.getElementById("delete");
+            // 取得した要素がクリックされた時に実行される関数を登録。
+            deleteBtn.addEventListener("click", (e) => {
+                // 確認画面を表示
+                let result = confirm("id:[[${memberId}]]を削除してもよろしいですか？");
+                if (!result) {
+                    // もし、キャンセルが押されたら、クリックされた要素動作を取りやめる
+                    e.preventDefault();
+                }
+                return result;
+            });
+        });
+    </script>
 </div>
 </html>
